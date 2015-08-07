@@ -11,20 +11,20 @@ import redis.clients.jedis.JedisPubSub;
  */
 class Subscriber 
 {
-	/**
+    /**
      * @FieldName: jedisClient.
      * @Description: the jedis client of redis server.
      */
-	private Jedis jedisClient;
+    private Jedis jedisClient;
 	
-	/**
+    /**
      * @Title: Subscriber.
      * @Description: the construct function which is used to initialize the object.
-	 * @param ip:the ip address of the redis server.
-	 * @param channle: the pub/sub channel on the redis server.
+     * @param ip:the ip address of the redis server.
+     * @param channle: the pub/sub channel on the redis server.
      * @return none.
      */
-	Subscriber(final String ip, final String channel) 
+        public Subscriber(final String ip, final String channel) 
 	{
 		jedisClient = new Jedis(ip, 6379, 0);
 		final JedisPubSub jedisPubSub = new JedisPubSub() 
@@ -71,35 +71,35 @@ class Subscriber
  */
 class Publisher
 { 
-	/**
+    /**
      * @FieldName: jedisClient.
      * @Description: the jedis client which connect the redis server.
      */
-	protected Jedis jedisClient;
+     protected Jedis jedisClient;
 	
-	/**
+    /**
      * @FieldName: publishChannel.
      * @Description: the publish channel which the user config client listen to.
      */
-	protected String publishChannel;
+     protected String publishChannel;
 	
-	/**
+    /**
      * @Title: Publisher.
      * @Description: the construct function which is used to initialize the object.
-	 * @param ip:the ip address of the redis server.
-	 * @param channle: the pub/sub channel on the redis server.
+     * @param ip:the ip address of the redis server.
+     * @param channle: the pub/sub channel on the redis server.
      * @return none.
      */
-	public Publisher(String ip, String channel)
-	{
-		jedisClient = new Jedis(ip, 6379, 0);
-		publishChannel = channel;
-	}
+    public Publisher(String ip, String channel)
+    {
+	jedisClient = new Jedis(ip, 6379, 0);
+	publishChannel = channel;
+    }
 	
-	/**
+    /**
      * @Title: sendConfig.
      * @Description: the function which is used to send config info to the ConfigClient.
-	 * @param config: the config message which will be send to ConfigClient.
+     * @param config: the config message which will be send to ConfigClient.
      * @return none.
      */
 	protected void sendConfig(String config)
@@ -127,19 +127,19 @@ class Publisher
  */
 public class ConfigMonitor
 {
-	/**
+    /**
      * @FieldName: sub.
      * @Description: the subscriber instance for monitor fetch user application info.
      */
-	private static Subscriber sub;
+    private static Subscriber sub;
 	
     /**
      * @FieldName: pub.
      * @Description: the publisher instance for monitor send the config info to the ConfigClient.
      */
-	private static Publisher pub;
+    private static Publisher pub;
 	
-	/**
+    /**
      * @Title: main.
      * @Description: main function of the config monitor.
      * @param args: input arguments of the main function. 
