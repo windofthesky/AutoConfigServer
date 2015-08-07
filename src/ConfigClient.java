@@ -12,17 +12,17 @@ import redis.clients.jedis.JedisPubSub;
  */
 class ScheduledTimerTask extends TimerTask
 {
-	/**
+    /**
      * @FieldName: ipaddr.
      * @Description: the ip address of the redis server which is used to store the parameter.
      */
-	private String ipaddr;
+    private String ipaddr;
 	
-	/**
+    /**
      * @FieldName: channel.
      * @Description: the channel which is used to publish message of application.
      */
-	private String channel;
+    private String channel;
 	
     /**
      * @Title: setIPAddr.
@@ -30,10 +30,10 @@ class ScheduledTimerTask extends TimerTask
      * @param ip: the redis server ip address. 
      * @return none.
      */
-	public void setIPAddr(String ip)
-	{
-		this.ipaddr = ip;
-	}
+    public void setIPAddr(String ip)
+    {
+	this.ipaddr = ip;
+    }
 	
     /**
      * @Title: setChannel.
@@ -41,12 +41,12 @@ class ScheduledTimerTask extends TimerTask
      * @param chnl: the channel on the redis server. 
      * @return none.
      */
-	public void setChannel(String chnl)
-	{
-		this.channel = chnl;
-	}
+    public void setChannel(String chnl)
+    {
+	this.channel = chnl;
+    }
 
-	@Override
+        @Override
 	public void run()
 	{
 		System.out.println("Time's up!!");
@@ -86,17 +86,17 @@ class ScheduledTimerTask extends TimerTask
  */
 class ScheduleTimer 
 {
-	/**
+    /**
      * @FieldName: timer.
      * @Description: the private java.util.Timer object of this class.
      */
     private Timer timer;
     
-	/**
+    /**
      * @Title: ScheduleTimer.
      * @Description: the construct function which is used to initialize the object.
-	 * @param ip:the ip address of the redis server.
-	 * @param channle: the pub/sub channel on the redis server.
+     * @param ip:the ip address of the redis server.
+     * @param channle: the pub/sub channel on the redis server.
      * @param time: the interval value of the timer. 
      * @return none.
      */
@@ -126,17 +126,17 @@ public class ConfigClient
      * @Description: the user defined function which is used to re-initialize the user application.
      * @return none.
      */
-	private static void user_def_func()
-	{
-		//this function is defined by Client user,when get the latest config info
-		//and then this function will be called to re-initialize the application config. 
-	}
+    private static void user_def_func()
+    {
+	//this function is defined by Client user,when get the latest config info
+	//and then this function will be called to re-initialize the application config. 
+    }
 	
-	/**
+    /**
      * @Title: Subscriber.
      * @Description: the function which is used to subscribe one channel from redis server.
      * @param ip: the redis server ip address. 
-	 * @param channel: the specific channel which was subscribed by the application.
+     * @param channel: the specific channel which was subscribed by the application.
      * @return none.
      */
 	private static void Subscriber(final String ip, final String channel)
@@ -188,16 +188,16 @@ public class ConfigClient
      * @Title: Publisher.
      * @Description: the function which is used to publish message to one channel on redis server.
      * @param ip: the redis server ip address. 
-	 * @param channel: the specific channel which the message will be published by the application.
-	 * @param message: the message which will be published to specific channel.
+     * @param channel: the specific channel which the message will be published by the application.
+     * @param message: the message which will be published to specific channel.
      * @return none.
      */
-	private static void Publisher(String ip,String channel, String message)
-	{
-		Jedis jedis = new Jedis(ip, 6379, 0);
-		jedis.publish(channel, message);
-		jedis.quit();	
-	}
+    private static void Publisher(String ip,String channel, String message)
+    {
+	Jedis jedis = new Jedis(ip, 6379, 0);
+	jedis.publish(channel, message);
+	jedis.quit();	
+    }
 	
     /**
      * @Title: main.
@@ -205,10 +205,10 @@ public class ConfigClient
      * @param args: input arguments of the main function. 
      * @return none.
      */
-	public static void main(String[] args)
-	{
-		Subscriber("10.1.1.178", "TEST");  //application subscribe one channel(named "TEST").
-		Publisher("10.1.1.178", "TEST", "this is a test message!"); //application publish message to channel.
-	    ScheduleTimer pubTimer =new ScheduleTimer("10.1.1.178", "TEST", 5);
-	}
+    public static void main(String[] args)
+    {
+	Subscriber("10.1.1.178", "TEST");  //application subscribe one channel(named "TEST").
+	Publisher("10.1.1.178", "TEST", "this is a test message!"); //application publish message to channel.
+        ScheduleTimer pubTimer =new ScheduleTimer("10.1.1.178", "TEST", 5);
+    }
 }
