@@ -25,6 +25,12 @@ class ScheduledTimerTask extends TimerTask
     private String channel;
 	
     /**
+     *@FieldName: service_port.
+     *@Description: the service port of the redis server which is used to store the parameter.
+     */
+    private int service_port;
+
+    /**
      * @Title: setIPAddr.
      * @Description: the function which is used to assign ip to private ipaddr.
      * @param ip: the redis server ip address. 
@@ -44,6 +50,17 @@ class ScheduledTimerTask extends TimerTask
     public void setChannel(String chnl)
     {
 	this.channel = chnl;
+    }
+    
+    /**
+     * @Title: setServicePort.
+     * @Description: the function which is used to assign port to private service_port.
+     * @param port: the redis server sercice port. 
+     * @return none.
+     */
+    public void setServicePort(int port)
+    {
+	this.service_port = port;
     }
 
         @Override
