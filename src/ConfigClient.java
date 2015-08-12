@@ -117,11 +117,12 @@ class ScheduleTimer
      * @param time: the interval value of the timer. 
      * @return none.
      */
-    public ScheduleTimer(String ip, String channel, int time)
+    public ScheduleTimer(String ip, int port, String channel, int time)
     {
     	timer = new Timer();
     	ScheduledTimerTask timerTask = new ScheduledTimerTask();
     	timerTask.setIPAddr(ip);
+    	timerTask.serServicePort(port);
     	timerTask.setChannel(channel);
     	
     	System.out.println("Timer Start!!!");
