@@ -67,7 +67,7 @@ class ScheduledTimerTask extends TimerTask
 	public void run()
 	{
 		System.out.println("Time's up!!");
-		Jedis jedis = new Jedis(ipaddr, 6379, 0);
+		Jedis jedis = new Jedis(this.ipaddr, this.service_port, 0);
 		/*
 		 * if user application has some monitor parameters,they should be got here 
 		 * and then publish them to specific monitor channels. 
@@ -113,6 +113,7 @@ class ScheduleTimer
      * @Title: ScheduleTimer.
      * @Description: the construct function which is used to initialize the object.
      * @param ip:the ip address of the redis server.
+     * @param port: the service port of the redis server.
      * @param channle: the pub/sub channel on the redis server.
      * @param time: the interval value of the timer. 
      * @return none.
@@ -154,10 +155,11 @@ public class ConfigClient
      * @Title: Subscriber.
      * @Description: the function which is used to subscribe one channel from redis server.
      * @param ip: the redis server ip address. 
+     * @param port: the redis server service port.
      * @param channel: the specific channel which was subscribed by the application.
      * @return none.
      */
-	private static void Subscriber(final String ip, final String channel)
+	private static void Subscriber(final String ip, final int port, final String channel)
 	{
 		final JedisPubSub jedisPubSub = new JedisPubSub() 
 		{
@@ -189,7 +191,7 @@ public class ConfigClient
 				//System.out.println("Start!!!"); 
 				try 
 				{
-					Jedis jedis = new Jedis(ip, 6379, 0);  //0 means no timeout.
+					Jedis jedis = new Jedis(ip, port, 0);  //0 means no timeout.
 					jedis.subscribe(jedisPubSub, channel);
 					jedis.quit();
 					jedis.close();
@@ -206,13 +208,14 @@ public class ConfigClient
      * @Title: Publisher.
      * @Description: the function which is used to publish message to one channel on redis server.
      * @param ip: the redis server ip address. 
+     * @param port: the redis server service port.
      * @param channel: the specific channel which the message will be published by the application.
      * @param message: the message which will be published to specific channel.
      * @return none.
      */
-    private static void Publisher(String ip,String channel, String message)
+    private static void Publisher(String ip, int port, String channel, String message)
     {
-	Jedis jedis = new Jedis(ip, 6379, 0);
+	Jedis jedis = new Jedis(ip, port, 0);
 	jedis.publish(channel, message);
 	jedis.quit();	
     }
@@ -225,8 +228,8 @@ public class ConfigClient
      */
     public static void main(String[] args)
     {
-	Subscriber("10.1.1.178", "TEST");  //application subscribe one channel(named "TEST").
-	Publisher("10.1.1.178", "TEST", "this is a test message!"); //application publish message to channel.
-        ScheduleTimer pubTimer =new ScheduleTimer("10.1.1.178", "TEST", 5);
+	Subscriber("10.1.1.178", 6379, "TEST");  //application subscribe one channel(named "TEST").
+	Publisher("10.1.1.178", 6379 "TEST", "this is a test message!"); //application publish message to channel.
+        ScheduleTimer pubTimer =new ScheduleTimer("10.1.1.178", 6379, "TEST", 5);
     }
 }
