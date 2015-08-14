@@ -27,69 +27,69 @@ import redis.clients.jedis.JedisPubSub;
  */
 public class Subscriber 
 {
-	/**
+    /**
      * @FieldName: dbClient.
      * @Description: the ConfigServer database client.
      */
-	private ConfigDBClient dbClient;
+    private ConfigDBClient dbClient;
 	
-	/**
+    /**
      * @Title: Subscriber.
      * @Description: the construct function which is used to initialize the object.
-	   * @param ip:the ip address of the redis server.
-	   * @param channle: the pub/sub channel on the redis server.
+     * @param ip:the ip address of the redis server.
+     * @param channle: the pub/sub channel on the redis server.
      * @return none.
      */
-	public Subscriber(String serverinfo_0, String serverinfo_1, String serverinfo_2, String channel, String channel) 
+    public Subscriber(String serverinfo_0, String serverinfo_1, String serverinfo_2, String channel, String channel) 
+    {
+	this.configdb = new ConfigDBClient(serverinfo_0, serverinfo_1, serverinfo_2);
+	final JedisPubSub jedisPubSub = new JedisPubSub() 
 	{
-		this.configdb = new ConfigDBClient(serverinfo_0, serverinfo_1, serverinfo_2);
-		final JedisPubSub jedisPubSub = new JedisPubSub() 
+	    @Override	
+	    public void onMessage(String channel, String message) 
+	    {
+		Jedis jedisConnector = null;
+		boolean borrowOrOprSuccess = true;
+		//System.out.println("Input channel =="+channel + "----input message ==" + message); 
+		//When get the message from ConfigClient,Store them into redis hash list. 
+		Calendar calendar = Calendar.getInstance();
+			
+		//Sub_key is timestamp.
+	        String store_time = String.valueOf(calendar.getTime());  
+			
+		//Main_hashkey is channel with "_SUB" at the end.
+		try 
 		{
-			@Override	
-			public void onMessage(String channel, String message) 
-			{
-				Jedis jedisConnector = null;
-		        boolean borrowOrOprSuccess = true;
-				//System.out.println("Input channel =="+channel + "----input message ==" + message); 
-			    //When get the message from ConfigClient,Store them into redis hash list. 
-				Calendar calendar = Calendar.getInstance();
-				
-				//Sub_key is timestamp.
-			    String store_time = String.valueOf(calendar.getTime());  
-				
-				//Main_hashkey is channel with "_SUB" at the end.
-		        try 
-		        {
-			        jedisConnector = dbClient.db_client.getResource();
-			        jedisConnector.hset(channel+"_SUB", store_time, message); 
-		        }
-		        catch(JedisConnectionException e)
-		        {
-			        borrowOrOprSuccess = false;
-			        if(jedisConnector != null)
-			        {
-				        dbClient.db_client.returnBrokenResource(jedisConnector);
-				        jedisConnector = null;
-			        }
-			        throw e;
-		        }
-		        finally
-		        {
-			        if(borrowOrOprSuccess && (jedisConnector!=null))
-			        {
-				        dbClient.db_client.returnResource(jedisConnector);
-			        }
-		        }
-		    }  
-		};
-		new Thread(new Runnable() 
+		    jedisConnector = dbClient.db_client.getResource();
+		    jedisConnector.hset(channel+"_SUB", store_time, message); 
+		}
+		catch(JedisConnectionException e)
+	        {
+		    borrowOrOprSuccess = false;
+	            if(jedisConnector != null)
+		    {
+		        dbClient.db_client.returnBrokenResource(jedisConnector);
+		        jedisConnector = null;
+  	            }
+		    throw e;
+		}
+	        finally
+	        {
+	            if(borrowOrOprSuccess && (jedisConnector!=null))
+ 	            {
+		        dbClient.db_client.returnResource(jedisConnector);
+		    }
+		}
+            }  
+	};
+	new Thread(new Runnable() 
+	{
+		@Override
+		public void run() 
 		{
-			@Override
-			public void run() 
-			{
-				//System.out.println("Start!!!"); 
-				Jedis jedisConnector = null;
-		        boolean borrowOrOprSuccess = true;
+			//System.out.println("Start!!!"); 
+			Jedis jedisConnector = null;
+	                boolean borrowOrOprSuccess = true;
 		
 		        try 
 		        {
