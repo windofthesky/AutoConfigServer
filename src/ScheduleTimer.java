@@ -24,19 +24,19 @@ import java.util.TimerTask;
  */
 public class ScheduleTimer 
 {
-	/**
+    /**
      * @FieldName: timer.
      * @Description: the private java.util.Timer object of this class.
      */
     private Timer timer;
     
-	/**
+    /**
      * @Title: ScheduleTimer.
      * @Description: the construct function which is used to initialize the object.
-	   * @param serverinfo_0: the first redis server node ip & port information in the redis sentinel.
-	   * @param serverinfo_1: the second redis server node ip & port information in the redis sentinel.
+     * @param serverinfo_0: the first redis server node ip & port information in the redis sentinel.
+     * @param serverinfo_1: the second redis server node ip & port information in the redis sentinel.
      * @param serverinfo_2: the third redis server node ip & port information in the redis sentinel.
-	   * @param channle: the pub/sub channel on the redis server.
+     * @param channle: the pub/sub channel on the redis server.
      * @param time: the interval value of the timer. 
      * @return none.
      */
